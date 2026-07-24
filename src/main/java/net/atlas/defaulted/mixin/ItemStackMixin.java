@@ -1,8 +1,10 @@
 package net.atlas.defaulted.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.atlas.defaulted.Defaulted;
 import net.atlas.defaulted.compat.OwoCompat;
 import net.atlas.defaulted.extension.ItemStackExtensions;
+import net.atlas.defaulted.utils.Hooks;
 import net.atlas.defaulted.utils.ReferentialDataComponentMap;
 //? >=26.1 {
 import net.minecraft.core.Holder;
@@ -25,6 +27,7 @@ import java.lang.reflect.Field;
 //? <26.1 {
 /*import net.minecraft.world.level.ItemLike;
 *///?}
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,8 +35,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //? >=1.21.5 {
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 //?}
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemStack.class)
@@ -129,4 +132,9 @@ public abstract class ItemStackMixin implements ItemStackExtensions {
         }
         return derived;
 	}
+
+    @WrapOperation(method = "isEnchantable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/ItemEnchantments;isEmpty()Z"))
+    private boolean hasAnyEnchantments(ItemEnchantments instance, Operation<Boolean> original) {
+        return Hooks.addEnchantableStatusForDefaultEnchantments(original.call(instance), instance, ItemStack.class.cast(this));
+    }
 }

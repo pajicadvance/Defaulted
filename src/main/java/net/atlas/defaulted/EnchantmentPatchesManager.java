@@ -23,9 +23,9 @@ import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 //? <=1.21.1 {
 /*//? neoforge {
-import net.neoforged.neoforge.common.conditions.ConditionalOps;
+/^import net.neoforged.neoforge.common.conditions.ConditionalOps;
 import net.neoforged.neoforge.common.conditions.WithConditions;
-//?}
+^///?}
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 *///?}
@@ -109,21 +109,21 @@ public class EnchantmentPatchesManager extends SimpleJsonResourceReloadListener<
 
     //? <=1.21.1 {
     /*//? neoforge {
-    public Codec<Optional<EnchantmentPatches>> getCodec() {
-        return ConditionalOps.createConditionalCodecWithConditions(EnchantmentPatches.CODEC).xmap(optionalWithConditions -> optionalWithConditions.map(WithConditions::carrier), patches -> patches.map(itemPatches -> WithConditions.builder(itemPatches).build()));
-    //?} fabric {
     /^public Codec<Optional<EnchantmentPatches>> getCodec() {
+        return ConditionalOps.createConditionalCodecWithConditions(EnchantmentPatches.CODEC).xmap(optionalWithConditions -> optionalWithConditions.map(WithConditions::carrier), patches -> patches.map(itemPatches -> WithConditions.builder(itemPatches).build()));
+    ^///?} fabric {
+    public Codec<Optional<EnchantmentPatches>> getCodec() {
         return EnchantmentPatches.CODEC.xmap(Optional::of, Optional::get);
-    ^///?}
+    //?}
     }
 
     //? neoforge {
-    public RegistryOps<JsonElement> makeOps() {
-        return makeConditionalOps();
-    //?} fabric {
     /^public RegistryOps<JsonElement> makeOps() {
+        return makeConditionalOps();
+    ^///?} fabric {
+    public RegistryOps<JsonElement> makeOps() {
         return registries.createSerializationContext(JsonOps.INSTANCE);
-    ^///?}
+    //?}
     }
     *///?}
 

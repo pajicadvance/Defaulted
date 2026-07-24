@@ -22,6 +22,7 @@ public class ItemPatchGenerators extends Bootstrapper<MapCodec<? extends PatchGe
         register("modify_enchantments", () -> EnchantmentModifierGenerator.CODEC);
         register("modify_from_tool_material", () -> ModifyTierStatsGenerator.CODEC);
         register("modify_use_seconds", () -> EditUseDurationGenerator.CODEC);
+        register("patch_phantom_components", () -> PhantomDataComponentPatchGenerator.CODEC);
         register("tool_material", () -> ChangeTierGenerator.CODEC);
         register("vanilla_weapon_stats", () -> WeaponStatsGenerator.CODEC);
     }

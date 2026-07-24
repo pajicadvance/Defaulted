@@ -6,8 +6,11 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.atlas.defaulted.component.backport.Enchantable;
 import net.atlas.defaulted.component.backport.PhantomDataComponents;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 *///?}
+import net.atlas.defaulted.utils.Hooks;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
 //? <=1.21.1 && neoforge
@@ -32,4 +35,9 @@ public abstract class EnchantmentHelperMixin {
         return item.defaulted$getOrDefault(PhantomDataComponents.ENCHANTABLE.get(), Enchantable.EMPTY).value();
     }
     *///?}
+
+    @WrapMethod(method = "hasAnyEnchantments")
+    private static boolean hasAnyEnchantments(ItemStack itemStack, Operation<Boolean> original) {
+        return Hooks.considerNonEnchantedIfMatchingDefaultEnchantments(original.call(itemStack), itemStack);
+    }
 }

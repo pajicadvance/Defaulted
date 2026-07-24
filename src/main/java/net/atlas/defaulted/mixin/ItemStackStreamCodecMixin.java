@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.atlas.defaulted.Defaulted;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(/*? <1.21.5 {*/ /*targets = {"net.minecraft.world.item.ItemStack$2"} *//*?} else {*/ Defaulted.class /*?}*/)
+@Mixin(/*? <1.21.5 {*/ /*targets = {"net.minecraft.world.item.ItemStack$1"} *//*?} else {*/ Defaulted.class /*?}*/)
 public class ItemStackStreamCodecMixin {
     //? <1.21.5 {
     /*@WrapMethod(method = "decode")

@@ -9,6 +9,7 @@
     "ActualItemMixin",
     "DataComponentPatchAccessor",
     "EnchantmentHelperMixin",
+    "GrindstoneMenuMixin",
     "ItemAccessor",
     "ItemMixin",
     "ItemStackMixin",
