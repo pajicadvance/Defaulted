@@ -16,8 +16,8 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 //? >=1.21.11 {
-import net.fabricmc.fabric.api.resource.v1.DataResourceLoader;
-//?}
+/^import net.fabricmc.fabric.api.resource.v1.DataResourceLoader;
+^///?}
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.Identifier;
 
@@ -41,9 +41,9 @@ public final class DefaultedFabric implements ModInitializer {
         registerReloadListener(defaultComponentPatches, DefaultComponentPatchesManager::new);
         registerReloadListener(enchantmentPatches, EnchantmentPatchesManager::new);
         //? >=26.1 {
-        DataResourceLoader.get()
+        /^DataResourceLoader.get()
                 .addListenerOrdering(enchantmentPatches, defaultComponentPatches);
-        //?} >=1.21.11 {
+        ^///?} >=1.21.11 {
         /^DataResourceLoader.get()
                         .addReloaderOrdering(enchantmentPatches, defaultComponentPatches);
         ^///?}
@@ -53,8 +53,8 @@ public final class DefaultedFabric implements ModInitializer {
                 EnchantmentPatchesManager.getInstance().load(registries);
             }
         });
-        PayloadTypeRegistry.clientboundPlay().register(ClientboundDefaultComponentsSyncPacket.TYPE, ClientboundDefaultComponentsSyncPacket.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(ClientboundEnchantmentsSyncPacket.TYPE, ClientboundEnchantmentsSyncPacket.CODEC);
+        PayloadTypeRegistry.playS2C().register(ClientboundDefaultComponentsSyncPacket.TYPE, ClientboundDefaultComponentsSyncPacket.CODEC);
+        PayloadTypeRegistry.playS2C().register(ClientboundEnchantmentsSyncPacket.TYPE, ClientboundEnchantmentsSyncPacket.CODEC);
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> {
             if (ServerPlayNetworking.canSend(player, ClientboundEnchantmentsSyncPacket.TYPE))
                 ServerPlayNetworking.send(player, new ClientboundEnchantmentsSyncPacket(new ArrayList<>(EnchantmentPatchesManager.getCached(player.registryAccess()))));

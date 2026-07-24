@@ -2,10 +2,10 @@ package net.atlas.defaulted.utils;
 
 import net.atlas.defaulted.component.backport.PhantomDataComponents;
 import net.atlas.defaulted.component.phantom.EnchantmentOverrides;
+import net.atlas.defaulted.mixin.EnchantmentHelperAccessor;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 import java.util.function.Consumer;
@@ -24,7 +24,7 @@ public class Hooks {
     public static boolean considerNonEnchantedIfMatchingDefaultEnchantments(boolean hasEnchantments, ItemStack itemStack) {
         if (itemStack.getItem().defaulted$has(PhantomDataComponents.ENCHANTMENT_OVERRIDES.get())) {
             EnchantmentOverrides overrides = itemStack.getItem().defaulted$get(PhantomDataComponents.ENCHANTMENT_OVERRIDES.get());
-            DataComponentType<ItemEnchantments> componentType = EnchantmentHelper.getComponentType(itemStack);
+            DataComponentType<ItemEnchantments> componentType = EnchantmentHelperAccessor.getComponentType(itemStack);
             ItemEnchantments defaultEnchantments = itemStack.getPrototype().getOrDefault(componentType, ItemEnchantments.EMPTY);
             if (!defaultEnchantments.isEmpty() && overrides.grindsBackToDefault()) {
                 ItemEnchantments enchantments = itemStack.getOrDefault(componentType, ItemEnchantments.EMPTY);
@@ -38,7 +38,7 @@ public class Hooks {
         Consumer<ItemEnchantments.Mutable> wrapped = consumer;
         if (itemStack.getItem().defaulted$has(PhantomDataComponents.ENCHANTMENT_OVERRIDES.get())) {
             EnchantmentOverrides overrides = itemStack.getItem().defaulted$get(PhantomDataComponents.ENCHANTMENT_OVERRIDES.get());
-            DataComponentType<ItemEnchantments> componentType = EnchantmentHelper.getComponentType(itemStack);
+            DataComponentType<ItemEnchantments> componentType = EnchantmentHelperAccessor.getComponentType(itemStack);
             ItemEnchantments defaultEnchantments = itemStack.getPrototype().getOrDefault(componentType, ItemEnchantments.EMPTY);
             if (!defaultEnchantments.isEmpty() && overrides.grindsBackToDefault()) {
                 wrapped = mutable -> {
