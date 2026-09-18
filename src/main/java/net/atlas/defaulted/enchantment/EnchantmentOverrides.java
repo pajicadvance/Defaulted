@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.atlas.defaulted.enchantment.value_provider.ValueProvider;
 import net.atlas.defaulted.utils.DataComponentPatchUtils;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -27,7 +27,7 @@ public record EnchantmentOverrides(Optional<Component> description,
             i -> i.group(
                             ComponentSerialization.CODEC.optionalFieldOf("description").forGetter(EnchantmentOverrides::description),
                             EnchantmentDefinition.CODEC.forGetter(EnchantmentOverrides::definition),
-                            RegistryCodecs.homogeneousList(Registries.ENCHANTMENT).optionalFieldOf("exclusive_set").forGetter(EnchantmentOverrides::exclusiveSet),
+                            RegistryCodecs.holderSet(Registries.ENCHANTMENT).optionalFieldOf("exclusive_set").forGetter(EnchantmentOverrides::exclusiveSet),
                             DataComponentPatchUtils.codec(BuiltInRegistries.ENCHANTMENT_EFFECT_COMPONENT_TYPE).optionalFieldOf("patch", DataComponentPatch.EMPTY).forGetter(EnchantmentOverrides::effectsPatch)
                     )
                     .apply(i, EnchantmentOverrides::new)

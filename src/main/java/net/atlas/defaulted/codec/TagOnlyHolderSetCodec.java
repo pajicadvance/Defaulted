@@ -57,7 +57,11 @@ public class TagOnlyHolderSetCodec<E> implements Codec<HolderSet<E>> {
 
 	public <T> DataResult<T> encode(final HolderSet<E> input, final DynamicOps<T> ops, final T prefix) {
 		if (ops instanceof RegistryOps<T> registryOps) {
-			Optional<HolderOwner<E>> maybeOwner = registryOps.owner(this.registryKey);
+			//? <26.3 {
+			/*Optional<HolderOwner<E>> maybeOwner = registryOps.owner(this.registryKey);
+			 *///?} else {
+			Optional<? extends HolderOwner<E>> maybeOwner = registryOps.getter(this.registryKey);
+			//?}
 			if (maybeOwner.isPresent()) {
 				if (!input.canSerializeIn(maybeOwner.get())) {
 					return DataResult.error(() -> "HolderSet " + input + " is not valid in current registry set");

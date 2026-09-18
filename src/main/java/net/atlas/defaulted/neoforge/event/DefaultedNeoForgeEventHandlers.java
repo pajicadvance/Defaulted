@@ -1,7 +1,7 @@
 package net.atlas.defaulted.neoforge.event;
 
 //? neoforge {
-//? >1.21.1
+/*//? >1.21.1
 import net.atlas.defaulted.Defaulted;
 import net.atlas.defaulted.DefaultComponentPatchesManager;
 import net.atlas.defaulted.EnchantmentPatchesManager;
@@ -43,21 +43,23 @@ public class DefaultedNeoForgeEventHandlers {
     public static void onDatapackReload(final AddServerReloadListenersEvent addReloadListenerEvent) {
         Identifier defaultComponentPatches = Defaulted.id("default_component_patches");
         Identifier enchantmentPatches = Defaulted.id("enchantment_patches");
-        addReloadListenerEvent.addListener(defaultComponentPatches, new DefaultComponentPatchesManager(addReloadListenerEvent.getRegistryAccess()));
-        addReloadListenerEvent.addListener(enchantmentPatches, new EnchantmentPatchesManager(addReloadListenerEvent.getRegistryAccess()));
+        //~ if >26.2 'getRegistryAccess' -> 'getServerResources().getRegistryLookup' {
+        addReloadListenerEvent.addListener(defaultComponentPatches, new DefaultComponentPatchesManager(addReloadListenerEvent.getServerResources().getRegistryLookup()));
+        addReloadListenerEvent.addListener(enchantmentPatches, new EnchantmentPatchesManager(addReloadListenerEvent.getServerResources().getRegistryLookup()));
+        //~}
         addReloadListenerEvent.addDependency(enchantmentPatches, defaultComponentPatches);
     }
     //?} <=1.21.1 {
-    /*@SubscribeEvent
+    /^@SubscribeEvent
     public static void onDatapackReload(final AddReloadListenerEvent addReloadListenerEvent) {
         addReloadListenerEvent.addListener(new EnchantmentPatchesManager());
         addReloadListenerEvent.addListener(new DefaultComponentPatchesManager());
     }
-    *///?}
+    ^///?}
     @SubscribeEvent
     public static void serverStart(final ServerStartedEvent event) {
         DefaultComponentPatchesManager.getInstance().load(event.getServer().registryAccess());
         EnchantmentPatchesManager.getInstance().load(event.getServer().registryAccess());
     }
 }
-//?}
+*///?}

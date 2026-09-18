@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
-public class AbstractedHolder<T, A extends T> implements /*? neoforge {*/ Holder<T>, /*?}*/ Supplier<A> {
+public class AbstractedHolder<T, A extends T> implements /*? neoforge {*/ /*Holder<T>, *//*?}*/ Supplier<A> {
     protected final ResourceKey<T> key;
     private final Holder<T> delegate;
 
@@ -126,8 +126,8 @@ public class AbstractedHolder<T, A extends T> implements /*? neoforge {*/ Holder
     }
 
     //? neoforge {
-    public @NonNull Holder<T> getDelegate() {
+    /*public @NonNull Holder<T> getDelegate() {
         return this.delegate.getDelegate();
     }
-    //?}
+    *///?}
 }

@@ -11,7 +11,7 @@ import net.atlas.defaulted.Defaulted;
 import net.atlas.defaulted.init.registry.Bootstrapper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.PatchedDataComponentMap;
@@ -74,7 +74,7 @@ public class PatchConditions extends Bootstrapper<MapCodec<? extends PatchCondit
         }
     }
     public record ItemIsCondition(HolderSet<Item> items) implements PatchCondition {
-        public static final MapCodec<ItemIsCondition> CODEC = ExtraCodecs.nonEmptyHolderSet(RegistryCodecs.homogeneousList(Registries.ITEM)).xmap(ItemIsCondition::new, ItemIsCondition::items).fieldOf("items");
+        public static final MapCodec<ItemIsCondition> CODEC = ExtraCodecs.nonEmptyHolderSet(RegistryCodecs.holderSet(Registries.ITEM)).xmap(ItemIsCondition::new, ItemIsCondition::items).fieldOf("items");
         @SuppressWarnings("deprecation")
         @Override
         public boolean matches(Item item, PatchedDataComponentMap patchedDataComponentMap) {

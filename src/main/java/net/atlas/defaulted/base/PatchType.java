@@ -17,9 +17,10 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.core.registries.codec.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.util.Unit;
@@ -50,8 +51,8 @@ public class PatchType<T, D, G extends BasePatchGenerator<G>, B extends BasePatc
             Util.make(new HashMap<>(), map -> {
                 map.put("patch", DataComponentPatchUtils.codec(BuiltInRegistries.ENCHANTMENT_EFFECT_COMPONENT_TYPE));
                 map.put("description", ComponentSerialization.CODEC);
-                map.put("supported_items", RegistryCodecs.homogeneousList(Registries.ITEM));
-                map.put("primary_items", RegistryCodecs.homogeneousList(Registries.ITEM));
+                map.put("supported_items", RegistryCodecs.holderSet(Registries.ITEM));
+                map.put("primary_items", RegistryCodecs.holderSet(Registries.ITEM));
                 map.put("force_primary_items_replacement", Codec.BOOL);
                 map.put("weight", ValueProvider.CODEC);
                 map.put("max_level", ValueProvider.CODEC);
@@ -61,19 +62,19 @@ public class PatchType<T, D, G extends BasePatchGenerator<G>, B extends BasePatc
                 map.put("slots", EquipmentSlotGroup.CODEC.listOf());
                 map.put("added_slots", EquipmentSlotGroup.CODEC.listOf());
                 map.put("removed_slots", EquipmentSlotGroup.CODEC.listOf());
-                map.put("exclusive_set", RegistryCodecs.homogeneousList(Registries.ENCHANTMENT));
+                map.put("exclusive_set", RegistryCodecs.holderSet(Registries.ENCHANTMENT));
             }),
             Util.make(new HashMap<>(), map -> {
                 map.put("description", ComponentSerialization.CODEC);
-                map.put("supported_items", RegistryCodecs.homogeneousList(Registries.ITEM));
-                map.put("primary_items", Codec.either(RegistryCodecs.homogeneousList(Registries.ITEM).xmap(Optional::of, Optional::get), Unit.CODEC));
+                map.put("supported_items", RegistryCodecs.holderSet(Registries.ITEM));
+                map.put("primary_items", Codec.either(RegistryCodecs.holderSet(Registries.ITEM).xmap(Optional::of, Optional::get), Unit.CODEC));
                 map.put("weight", Codec.INT);
                 map.put("max_level", Codec.INT);
                 map.put("min_cost", Enchantment.Cost.CODEC);
                 map.put("max_cost", Enchantment.Cost.CODEC);
                 map.put("anvil_cost", Codec.INT);
                 map.put("slots", EquipmentSlotGroup.CODEC.listOf());
-                map.put("exclusive_set", RegistryCodecs.homogeneousList(Registries.ENCHANTMENT));
+                map.put("exclusive_set", RegistryCodecs.holderSet(Registries.ENCHANTMENT));
                 map.put("effects", EnchantmentEffectComponents.CODEC);
                 map.put("full", Enchantment.DIRECT_CODEC);
             }),

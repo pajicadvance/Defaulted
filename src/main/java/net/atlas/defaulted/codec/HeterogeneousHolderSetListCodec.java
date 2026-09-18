@@ -65,7 +65,11 @@ public class HeterogeneousHolderSetListCodec<E> implements Codec<List<HolderSet<
 
 	public <T> DataResult<T> encode(final List<HolderSet<E>> input, final DynamicOps<T> ops, final T prefix) {
 		if (ops instanceof RegistryOps<T> registryOps) {
-			Optional<HolderOwner<E>> maybeOwner = registryOps.owner(this.registry);
+			//? <26.3 {
+			/*Optional<HolderOwner<E>> maybeOwner = registryOps.owner(this.registry);
+			*///?} else {
+			Optional<? extends HolderOwner<E>> maybeOwner = registryOps.getter(this.registry);
+			//?}
 			if (maybeOwner.isPresent()) {
 				if (input.stream().anyMatch(holders -> !holders.canSerializeIn(maybeOwner.get()))) {
 					return DataResult.error(() -> "HolderSet " + input + " is not valid in current registry set");

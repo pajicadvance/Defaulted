@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.atlas.defaulted.enchantment.value_provider.ValueProvider;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 
@@ -22,8 +22,8 @@ public record EnchantmentDefinition(Optional<HolderSet<Item>> supportedItems,
                                     Slots slots) {
     public static final MapCodec<EnchantmentDefinition> CODEC = RecordCodecBuilder.mapCodec(
             i -> i.group(
-                            RegistryCodecs.homogeneousList(Registries.ITEM).optionalFieldOf("supported_items").forGetter(EnchantmentDefinition::supportedItems),
-                            RegistryCodecs.homogeneousList(Registries.ITEM).optionalFieldOf("primary_items").forGetter(EnchantmentDefinition::primaryItems),
+                            RegistryCodecs.holderSet(Registries.ITEM).optionalFieldOf("supported_items").forGetter(EnchantmentDefinition::supportedItems),
+                            RegistryCodecs.holderSet(Registries.ITEM).optionalFieldOf("primary_items").forGetter(EnchantmentDefinition::primaryItems),
                             Codec.BOOL.optionalFieldOf("force_primary_items_replacement", false).forGetter(EnchantmentDefinition::forcePrimaryItemsReplacement),
                             ValueProvider.CODEC.optionalFieldOf("weight").forGetter(EnchantmentDefinition::weight),
                             ValueProvider.CODEC.optionalFieldOf("max_level").forGetter(EnchantmentDefinition::maxLevel),

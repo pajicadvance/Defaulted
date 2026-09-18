@@ -38,6 +38,9 @@ import net.neoforged.neoforge.common.conditions.WithConditions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 *///?}
+//? >26.2 {
+import net.minecraft.resources.FileToIdConverter;
+//?}
 import org.jspecify.annotations.Nullable;
 
 //? >1.21.1 {
@@ -61,7 +64,11 @@ public class DefaultComponentPatchesManager extends SimpleJsonResourceReloadList
     private Map<Identifier, ItemPatches> intermediary = new HashMap<>();
     //? >1.21.1 {
     public DefaultComponentPatchesManager(HolderLookup.Provider arg) {
-        super(arg, ItemPatches.CODEC, Defaulted.ITEM_PATCHES_TYPE);
+        //? >26.2 {
+        super(ItemPatches.CODEC, FileToIdConverter.registry(Defaulted.ITEM_PATCHES_TYPE));
+        //?} else {
+        /*super(arg, ItemPatches.CODEC, Defaulted.ITEM_PATCHES_TYPE);
+         *///?}
     //?} <=1.21.1 {
     /*public DefaultComponentPatchesManager() {
         super(GSON, "defaulted/default_component_patches");

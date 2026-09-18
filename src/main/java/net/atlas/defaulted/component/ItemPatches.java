@@ -9,7 +9,6 @@ import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import net.atlas.defaulted.Defaulted;
 import net.atlas.defaulted.base.BasePatches;
 import net.atlas.defaulted.codec.HeterogeneousHolderSetListCodec;
@@ -18,10 +17,11 @@ import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
+import net.minecraft.core.registries.codec.RegistryFixedCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
@@ -32,7 +32,7 @@ public record ItemPatches(List<HolderSet<Item>> elements, List<PatchGenerator> g
                     .and(additionalDetails(instance))
                     .apply(instance, ItemPatches::new)));
     public static final Codec<ItemPatches> FALLBACK_CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create(instance ->
-            instance.group(ExtraCodecs.nonEmptyHolderSet(RegistryCodecs.homogeneousList(Registries.ITEM)).optionalFieldOf("items", HolderSet.empty()).forGetter(ItemPatches::legacyItems),
+            instance.group(ExtraCodecs.nonEmptyHolderSet(RegistryCodecs.holderSet(Registries.ITEM)).optionalFieldOf("items", HolderSet.empty()).forGetter(ItemPatches::legacyItems),
                             TagOnlyHolderSetCodec.create(Registries.ITEM).listOf().optionalFieldOf("tags", Collections.emptyList()).forGetter(ItemPatches::legacyTags))
                     .and(additionalDetails(instance))
                     .apply(instance, ItemPatches::createLegacy)));

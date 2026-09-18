@@ -29,6 +29,9 @@ import net.neoforged.neoforge.common.conditions.WithConditions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 *///?}
+//? >26.2 {
+import net.minecraft.resources.FileToIdConverter;
+//?}
 import org.jspecify.annotations.Nullable;
 
 //? <=1.21.1
@@ -59,7 +62,11 @@ public class EnchantmentPatchesManager extends SimpleJsonResourceReloadListener<
     private Map<Identifier, EnchantmentPatches> intermediary = new HashMap<>();
     //? >1.21.1 {
     public EnchantmentPatchesManager(HolderLookup.Provider arg) {
-        super(arg, EnchantmentPatches.CODEC, Defaulted.ENCHANTMENT_PATCHES_TYPE);
+        //? >26.2 {
+        super(EnchantmentPatches.CODEC, FileToIdConverter.registry(Defaulted.ENCHANTMENT_PATCHES_TYPE));
+        //?} else {
+        /*super(arg, EnchantmentPatches.CODEC, Defaulted.ENCHANTMENT_PATCHES_TYPE);
+        *///?}
     //?} <=1.21.1 {
     /*public EnchantmentPatchesManager() {
         super(GSON, "defaulted/enchantment_patches");

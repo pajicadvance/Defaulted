@@ -226,6 +226,12 @@ stonecutter {
     val (version, loader) = current.project.split('-', limit = 2)
     properties.tags(version, loader)
 
+    replacements.string(current.parsed >= "26.3") {
+        replace("net.minecraft.core.RegistryCodecs", "net.minecraft.core.registries.codec.RegistryCodecs")
+        replace("net.minecraft.resources.RegistryFixedCodec", "net.minecraft.core.registries.codec.RegistryFixedCodec")
+        replace("RegistryCodecs.homogeneousList", "RegistryCodecs.holderSet")
+    }
+
     replacements.string(current.parsed >= "26.1") {
         replace("PayloadTypeRegistry.playS2C()", "PayloadTypeRegistry.clientboundPlay()")
     }

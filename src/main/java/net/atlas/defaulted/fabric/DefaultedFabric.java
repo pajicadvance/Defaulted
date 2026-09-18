@@ -1,7 +1,7 @@
 package net.atlas.defaulted.fabric;
 
 //? fabric {
-/*import net.atlas.defaulted.EnchantmentPatchesManager;
+import net.atlas.defaulted.EnchantmentPatchesManager;
 import net.atlas.defaulted.command.DefaultedCommand;
 import net.atlas.defaulted.init.DefaultedRegistries;
 import net.atlas.defaulted.networking.ClientboundDefaultComponentsSyncPacket;
@@ -16,8 +16,8 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 //? >=1.21.11 {
-/^import net.fabricmc.fabric.api.resource.v1.DataResourceLoader;
-^///?}
+import net.fabricmc.fabric.api.resource.v1.DataResourceLoader;
+//?}
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.Identifier;
 
@@ -41,20 +41,20 @@ public final class DefaultedFabric implements ModInitializer {
         registerReloadListener(defaultComponentPatches, DefaultComponentPatchesManager::new);
         registerReloadListener(enchantmentPatches, EnchantmentPatchesManager::new);
         //? >=26.1 {
-        /^DataResourceLoader.get()
+        DataResourceLoader.get()
                 .addListenerOrdering(enchantmentPatches, defaultComponentPatches);
-        ^///?} >=1.21.11 {
-        /^DataResourceLoader.get()
+        //?} >=1.21.11 {
+        /*DataResourceLoader.get()
                         .addReloaderOrdering(enchantmentPatches, defaultComponentPatches);
-        ^///?}
+        *///?}
         CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> {
             if (!client) {
                 DefaultComponentPatchesManager.getInstance().load(registries);
                 EnchantmentPatchesManager.getInstance().load(registries);
             }
         });
-        PayloadTypeRegistry.playS2C().register(ClientboundDefaultComponentsSyncPacket.TYPE, ClientboundDefaultComponentsSyncPacket.CODEC);
-        PayloadTypeRegistry.playS2C().register(ClientboundEnchantmentsSyncPacket.TYPE, ClientboundEnchantmentsSyncPacket.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(ClientboundDefaultComponentsSyncPacket.TYPE, ClientboundDefaultComponentsSyncPacket.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(ClientboundEnchantmentsSyncPacket.TYPE, ClientboundEnchantmentsSyncPacket.CODEC);
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> {
             if (ServerPlayNetworking.canSend(player, ClientboundEnchantmentsSyncPacket.TYPE))
                 ServerPlayNetworking.send(player, new ClientboundEnchantmentsSyncPacket(new ArrayList<>(EnchantmentPatchesManager.getCached(player.registryAccess()))));
@@ -64,4 +64,4 @@ public final class DefaultedFabric implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, commandBuildContext, environment) -> DefaultedCommand.register(dispatcher, commandBuildContext));
     }
 }
-*///?}
+//?}

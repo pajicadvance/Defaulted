@@ -9,7 +9,7 @@ import net.atlas.defaulted.component.PatchGenerator;
 import net.minecraft.core.Holder;
 //? >=26.1 {
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 //?}
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.PatchedDataComponentMap;
@@ -48,7 +48,7 @@ public record BlocksAttacksGenerator(Optional<Float> blockDelaySeconds,
 					.forGetter(BlocksAttacksGenerator::damageReductions),
 				BlocksAttacks.ItemDamageFunction.CODEC.optionalFieldOf("item_damage").forGetter(BlocksAttacksGenerator::itemDamage),
 				//? >=26.1 {
-				 RegistryCodecs.homogeneousList(Registries.DAMAGE_TYPE)
+				 RegistryCodecs.holderSet(Registries.DAMAGE_TYPE)
 				//?} <26.1 {
 				/*TagKey.codec(Registries.DAMAGE_TYPE)
 				*///?}

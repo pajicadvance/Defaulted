@@ -116,7 +116,8 @@ public class CommonUtils {
 
     public static Path createAndValidatePath(Identifier id, BasePatches<?, ?> patches, ServerLevel level) {
         //? >=26.1 {
-        return level.getStructureManager().worldTemplates().createAndValidatePathToStructure(id, FileToIdConverter.registry(patches.key()));
+        //~ if >=26.3 'getStructureManager' -> 'getStructureTemplateManager'
+        return level.getStructureTemplateManager().worldTemplates().createAndValidatePathToStructure(id, FileToIdConverter.registry(patches.key()));
         //?} <26.1 {
         /*return createAndValidatePathToResource(((StructureTemplateManagerAccessor)level.getStructureManager()).getGeneratedDir(), id, FileToIdConverter.json(Registries.elementsDirPath(patches.key())));
         *///?}

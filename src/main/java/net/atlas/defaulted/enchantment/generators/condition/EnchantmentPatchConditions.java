@@ -8,7 +8,7 @@ import net.atlas.defaulted.enchantment.EnchantmentBuilder;
 import net.atlas.defaulted.init.registry.Bootstrapper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.TypedDataComponent;
@@ -74,7 +74,7 @@ public class EnchantmentPatchConditions extends Bootstrapper<MapCodec<? extends 
         }
     }
     public record EnchantmentIsCondition(HolderSet<Enchantment> enchantments) implements EnchantmentPatchCondition {
-        public static final MapCodec<EnchantmentIsCondition> CODEC = ExtraCodecs.nonEmptyHolderSet(RegistryCodecs.homogeneousList(Registries.ENCHANTMENT)).xmap(EnchantmentIsCondition::new, EnchantmentIsCondition::enchantments).fieldOf("enchantments");
+        public static final MapCodec<EnchantmentIsCondition> CODEC = ExtraCodecs.nonEmptyHolderSet(RegistryCodecs.holderSet(Registries.ENCHANTMENT)).xmap(EnchantmentIsCondition::new, EnchantmentIsCondition::enchantments).fieldOf("enchantments");
         @SuppressWarnings("deprecation")
         @Override
         public boolean matches(Holder<Enchantment> enchantment, EnchantmentBuilder builder) {
