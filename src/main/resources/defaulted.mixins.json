@@ -20,7 +20,6 @@
     "PatchedDataComponentMapMixin",
     "ReferenceHolderMixin",
     "RegistrySyncManagerMixin",
-    "SimpleJsonResourceReloadListenerAccessor",
     "StructureTemplateManagerAccessor"
   ],
   "injectors": {
