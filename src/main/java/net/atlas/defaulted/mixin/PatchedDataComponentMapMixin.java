@@ -44,10 +44,12 @@ public class PatchedDataComponentMapMixin implements PatchedDataComponentMapExte
         this.defaulted$callback.applyPatch(patch);
     }
 
-    @Inject(method = "applyPatch(Lnet/minecraft/core/component/DataComponentType;Ljava/util/Optional;)V", at = @At("HEAD"))
-    public void applyPatchCallback(DataComponentType<?> type, Optional<?> value, CallbackInfo ci) {
+    //~ if >26.2 'util/Optional' -> 'lang/Object'
+    @Inject(method = "applyPatch(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)V", at = @At("HEAD"))
+    //~ if >26.2 'Optional<?> value' -> 'Object value'
+    public void applyPatchCallback(DataComponentType<?> type, Object value, CallbackInfo ci) {
         if (this.defaulted$callback == null) return;
-        this.defaulted$callback.applyPatch(type, value);
+        this.defaulted$callback.applyPatch(type, Optional.of(value));
     }
 
     @Inject(method = "restorePatch", at = @At("HEAD"))
