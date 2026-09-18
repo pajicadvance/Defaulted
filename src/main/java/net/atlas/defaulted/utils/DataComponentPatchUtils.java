@@ -13,7 +13,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.Unit;
 
 import java.util.Map;
-import java.util.Optional;
+
+//? >26.2 {
+import net.minecraft.core.component.Removed;
+//?} else {
+/*import java.util.Optional;
+*///?}
 
 import static net.minecraft.core.component.DataComponentPatch.EMPTY;
 
@@ -23,14 +28,17 @@ public class DataComponentPatchUtils {
             if (data.isEmpty()) {
                 return EMPTY;
             } else {
-                Reference2ObjectMap<DataComponentType<?>, Optional<?>> map = new Reference2ObjectArrayMap<>(data.size());
+                //~ if >26.2 'Optional<?>> map' -> 'Object> map'
+                Reference2ObjectMap<DataComponentType<?>, Object> map = new Reference2ObjectArrayMap<>(data.size());
 
                 for(Map.Entry<PatchKey, ?> entry : data.entrySet()) {
                     PatchKey key = entry.getKey();
                     if (key.removed()) {
-                        map.put(key.type(), Optional.empty());
+                        //~ if >26.2 'Optional.empty()' -> 'Removed.INSTANCE'
+                        map.put(key.type(), Removed.INSTANCE);
                     } else {
-                        map.put(key.type(), Optional.of(entry.getValue()));
+                        //~ if >26.2 'Optional.of(entry.getValue())' -> 'entry.getValue()'
+                        map.put(key.type(), entry.getValue());
                     }
                 }
 
@@ -39,12 +47,17 @@ public class DataComponentPatchUtils {
         }, (patch) -> {
             Reference2ObjectMap<PatchKey, Object> map = new Reference2ObjectArrayMap<>(getMap(patch).size());
 
-            for (Reference2ObjectMap.Entry<DataComponentType<?>, Optional<?>> entry : Reference2ObjectMaps.fastIterable(getMap(patch))) {
+            //~ if >26.2 'Optional<?>> entry' -> 'Object> entry'
+            for (Reference2ObjectMap.Entry<DataComponentType<?>, Object> entry : Reference2ObjectMaps.fastIterable(getMap(patch))) {
                 DataComponentType<?> type = entry.getKey();
                 if (!type.isTransient()) {
-                    Optional<?> value = entry.getValue();
-                    if (value.isPresent()) {
-                        map.put(new PatchKey(type, false), value.get());
+                    //~ if >26.2 'Optional<?> value' -> 'Object value'
+                    //~ if >26.2 'entry.getValue()' -> 'Removed.removedToNull(entry.getValue())'
+                    Object value = Removed.removedToNull(entry.getValue());
+                    //~ if >26.2 'value.isPresent()' -> 'value != null'
+                    if (value != null) {
+                        //~ if >26.2 'value.get()' -> 'value'
+                        map.put(new PatchKey(type, false), value);
                     } else {
                         map.put(new PatchKey(type, true), Unit.INSTANCE);
                     }
@@ -55,7 +68,8 @@ public class DataComponentPatchUtils {
             return (Map) map;
         });
     }
-    public static Reference2ObjectMap<DataComponentType<?>, Optional<?>> getMap(DataComponentPatch patch) {
+    //~ if >26.2 'Optional<?>> getMap' -> 'Object> getMap'
+    public static Reference2ObjectMap<DataComponentType<?>, Object> getMap(DataComponentPatch patch) {
         return ((DataComponentPatchAccessor) (Object) patch).getMap();
     }
     private record PatchKey(DataComponentType<?> type, boolean removed) {

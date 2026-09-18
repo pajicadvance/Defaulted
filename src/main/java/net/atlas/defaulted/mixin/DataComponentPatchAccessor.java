@@ -7,14 +7,17 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-import java.util.Optional;
+//? <26.3
+//import java.util.Optional;
 
 @Mixin(DataComponentPatch.class)
 public interface DataComponentPatchAccessor {
     @Invoker("<init>")
-    static DataComponentPatch create(final Reference2ObjectMap<DataComponentType<?>, Optional<?>> map) {
+    //~ if >26.2 'Optional<?>> map' -> 'Object> map'
+    static DataComponentPatch create(final Reference2ObjectMap<DataComponentType<?>, Object> map) {
         throw new AssertionError();
     }
     @Accessor
-    Reference2ObjectMap<DataComponentType<?>, Optional<?>> getMap();
+    //~ if >26.2 'Optional<?>>' -> 'Object>'
+    Reference2ObjectMap<DataComponentType<?>, Object> getMap();
 }

@@ -25,6 +25,7 @@
   "mixins": [
     "defaulted.mixins.json"
   ],
+  "accessWidener": "defaulted.classtweaker",
   "depends": {
     "fabric-api": ">=${fabric_api_version}",
     "fabricloader": ">=${fabric_version}",

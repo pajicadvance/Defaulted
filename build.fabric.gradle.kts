@@ -222,6 +222,10 @@ java {
     targetCompatibility = javaCompat
 }
 
+loom {
+    if (sc.current.parsed >= "26.3") accessWidenerPath = file("src/main/resources/defaulted.classtweaker")
+}
+
 stonecutter {
     val (version, loader) = current.project.split('-', limit = 2)
     properties.tags(version, loader)

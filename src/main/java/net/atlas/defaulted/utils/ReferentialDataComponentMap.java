@@ -9,13 +9,16 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
+//? <26.3
+//import java.util.Optional;
+
 public class ReferentialDataComponentMap implements DataComponentMap, DataComponentUpdateConsumer {
     private final Supplier<DataComponentMap> parentGetter;
-    private Reference2ObjectMap<DataComponentType<?>, Optional<?>> patch = new Reference2ObjectOpenHashMap<>();
+    //~ if >26.2 'Optional<?>> patch' -> 'Object> patch'
+    private Reference2ObjectMap<DataComponentType<?>, Object> patch = new Reference2ObjectOpenHashMap<>();
     private DataComponentMap cached = null;
     private PatchedDataComponentMap original = null;
     private boolean copyOnWrite;
@@ -60,7 +63,8 @@ public class ReferentialDataComponentMap implements DataComponentMap, DataCompon
     @Override
     public <T> void set(DataComponentType<T> type, T value) {
         ensureMapOwnership();
-        this.patch.put(type, Optional.ofNullable(value));
+        //~ if >26.2 'Optional.ofNullable(value)' -> 'Removed.nullToRemoved(value)'
+        this.patch.put(type, Removed.nullToRemoved(value));
     }
 
     public <T> void set(TypedDataComponent<T> value) {
@@ -70,19 +74,22 @@ public class ReferentialDataComponentMap implements DataComponentMap, DataCompon
     @Override
     public <T> void remove(DataComponentType<T> type) {
         ensureMapOwnership();
-        this.patch.put(type, Optional.empty());
+        //~ if >26.2 'Optional.empty()' -> 'Removed.INSTANCE'
+        this.patch.put(type, Removed.INSTANCE);
     }
 
     @Override
     public void applyPatch(DataComponentPatch patch) {
         ensureMapOwnership();
-        for (Reference2ObjectMap.Entry<DataComponentType<?>, Optional<?>> entry : Reference2ObjectMaps.fastIterable(((DataComponentPatchAccessor)(Object)patch).getMap())) {
+        //~ if >26.2 'Optional<?>> entry' -> 'Object> entry'
+        for (Reference2ObjectMap.Entry<DataComponentType<?>, Object> entry : Reference2ObjectMaps.fastIterable(((DataComponentPatchAccessor)(Object)patch).getMap())) {
             this.applyPatch(entry.getKey(), entry.getValue());
         }
     }
 
     @Override
-    public void applyPatch(DataComponentType<?> type, Optional<?> value) {
+    //~ if >26.2 'Optional<?> value' -> 'Object value'
+    public void applyPatch(DataComponentType<?> type, Object value) {
         ensureMapOwnership();
         this.patch.put(type, value);
     }

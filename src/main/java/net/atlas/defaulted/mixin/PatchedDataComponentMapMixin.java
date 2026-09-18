@@ -14,7 +14,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Optional;
+//? <26.3
+//import java.util.Optional;
 
 @Mixin(PatchedDataComponentMap.class)
 public class PatchedDataComponentMapMixin implements PatchedDataComponentMapExtensions {
@@ -49,7 +50,7 @@ public class PatchedDataComponentMapMixin implements PatchedDataComponentMapExte
     //~ if >26.2 'Optional<?> value' -> 'Object value'
     public void applyPatchCallback(DataComponentType<?> type, Object value, CallbackInfo ci) {
         if (this.defaulted$callback == null) return;
-        this.defaulted$callback.applyPatch(type, Optional.of(value));
+        this.defaulted$callback.applyPatch(type, value);
     }
 
     @Inject(method = "restorePatch", at = @At("HEAD"))
